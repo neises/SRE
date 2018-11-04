@@ -23,16 +23,6 @@ namespace SRE
 		void RenderModel();
 		void ClearModel();
 
-		void SetPosition(glm::vec3 _vPosition);
-		void SetRotation(glm::vec3 _vRotation);
-		void SetScale(glm::vec3 _vScale);
-
-		glm::vec3 GetPosition() ;
-		glm::vec3 GetRotation() ;
-		glm::vec3 GetScale() ;
-
-		glm::mat4 GetModelMatrix();
-
 		~Model();
 
 	private:
@@ -45,7 +35,6 @@ namespace SRE
 		std::vector<Texture*> m_aTexturList;
 		std::vector<unsigned int> m_aMeshToTexture;
 
-		SRE::Transform* m_Transform;
 
 		//debugging info
 		int m_iVerticesCount;

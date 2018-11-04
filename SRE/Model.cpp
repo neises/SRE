@@ -5,8 +5,6 @@ namespace SRE
 {
 	Model::Model()
 	{
-		m_Transform = new SRE::Transform();
-
 		m_iIndicesCount = 0;
 		m_iVerticesCount = 0;
 	}
@@ -160,43 +158,8 @@ namespace SRE
 		}
 	}
 
-	void Model::SetPosition(glm::vec3 _vPosition)
-	{
-		m_Transform->SetPosition(_vPosition);
-	}
-
-	void Model::SetRotation(glm::vec3 _vRotation)
-	{
-		m_Transform->SetEuler(_vRotation);
-	}
-
-	void Model::SetScale(glm::vec3 _vScale)
-	{
-		m_Transform->SetScale(_vScale);
-	}
-
-	glm::vec3 Model::GetPosition()
-	{
-		return m_Transform->GetPosition();
-	}
-
-	glm::mat4 Model::GetModelMatrix()
-	{
-		return m_Transform->GetMatrix();
-	}
-
 	Model::~Model()
 	{
-	}
-
-	glm::vec3 Model::GetRotation() 
-	{
-		return m_Transform->GetEuler();
-	}
-
-	glm::vec3 Model::GetScale() 
-	{
-		return m_Transform->GetScale();
 	}
 
 }
