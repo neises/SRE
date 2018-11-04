@@ -8,6 +8,10 @@
 #include "ShaderManager.h"
 #include "glm/gtx/transform.hpp"
 #include "Timer.h"
+#include "Scene.h"
+#include "SceneObject.h"
+#include "MeshDrawComponent.h"
+
 
 // settings
 const unsigned int SCR_WIDTH = 1024;
@@ -17,10 +21,18 @@ const float MOUSE_SENSITIVITY = 0.1f;
 
 // instances
 SRE::App* gApp;
-SRE::Model* gModel;
+SRE::Model* gHead;
 SRE::Model* gFloor;
 SRE::ShaderManager* gShaderManager;
 SRE::FPSCamera* gCamera;
+
+//objects
+SRE::Scene* gScene;
+SRE::SceneObject* gSceneObjectFloor;
+SRE::SceneObject* gSceneObjectHead;
+
+
+
 
 //light global
 glm::vec3 gLightPos(0.0f, 3.0f, -10.0f);
@@ -45,15 +57,31 @@ int main(int argc, char* argv[])
 	time.Reset();
 
 	// load model
-	gModel = new SRE::Model();
-	gModel->LoadModel("assets/Models/head.obj");
-	gModel->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	gModel->SetScale(glm::vec3(5.0f, 5.0f, 5.0f));
+	gHead = new SRE::Model();
+	gHead->LoadModel("assets/Models/head.obj");
 
 	gFloor = new SRE::Model();
 	gFloor->LoadModel("assets/Models/floor.obj");
-	gFloor->SetPosition(glm::vec3(0.0f, -1.0f, 0.0f));
-	gFloor->SetScale(glm::vec3(2.0f, 2.0f, 2.0f));
+
+	// scene
+	gScene = new SRE::Scene();
+
+
+	// objects
+	gSceneObjectFloor = new SRE::SceneObject();
+	SRE::MeshDrawComponent* md = new SRE::MeshDrawComponent(gFloor);
+	gSceneObjectFloor->AddComponent(md);
+	gSceneObjectFloor->GetTransform()->SetPosition(glm::vec3(0.0f, -0.5f, 0.0f));
+	gSceneObjectFloor->GetTransform()->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+	gSceneObjectHead = new SRE::SceneObject();
+	md = new SRE::MeshDrawComponent(gHead);
+	gSceneObjectHead->AddComponent(md);
+	gSceneObjectHead->GetTransform()->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	gSceneObjectHead->GetTransform()->SetScale(glm::vec3(5.0f,5.f,5.f));
+
+	gScene->AddChild(gSceneObjectFloor);
+	gScene->AddChild(gSceneObjectHead);
 	
 
 	// load shader
@@ -96,17 +124,15 @@ int main(int argc, char* argv[])
 
 		// our model matrix 
 		glm::mat4 modelmatrix;
-		//gModel->SetRotation(gModel->GetRotation()+=glm::vec3(0, time.GetDeltaTime(),0));
-		//gModel->SetPosition(gModel->GetPosition() + glm::vec3(0,0,0.5* time.GetDeltaTime()));
-		modelmatrix = gModel->GetModelMatrix();
-		pShaderProgram->SetModel(modelmatrix);
-		// render the model
-		gModel->RenderModel();
-		modelmatrix = gFloor->GetModelMatrix();
-		pShaderProgram->SetModel(modelmatrix);
-		gFloor->RenderModel();
 
-	
+		for (SRE::SceneObject* _pObjects : gScene->GetSceneObjects())
+		{
+			SRE::Context context;
+			context.mProjection = projection;
+			context.mView = view;
+			context.fDelta = time.GetDeltaTime();
+			_pObjects->Render(context, pShaderProgram);
+		}
 
 		// swap buffers
 		pWindow->SwapBuffers();

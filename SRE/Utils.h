@@ -1,5 +1,6 @@
 #pragma once
 #include "glm/common.hpp"
+#include "glm/gtx/transform.hpp"
 #include <assert.h>
 #include <memory>
 #include <functional>
@@ -74,5 +75,13 @@ namespace SRE
 		static const int WIDTH = 1280;
 		static constexpr const char* AppCaption = "Test MiniGL App";
 
+	};
+
+	struct Context
+	{
+	public:
+		glm::mat4 mView;
+		glm::mat4 mProjection;
+		float fDelta;
 	};
 }
