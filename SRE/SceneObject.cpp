@@ -12,10 +12,10 @@ namespace SRE
 	SceneObject::SceneObject() :m_pChildren(std::vector<SceneObject*>()),
 								m_pComponents(std::vector<BaseComponent*>()),
 								m_IsInitialized(false),
-		m_IsActive(true),
-		m_pParentScene(nullptr),
-		m_pParentObject(nullptr),
-		m_pTransform(nullptr)
+								m_IsActive(true),
+								m_pParentScene(nullptr),
+								m_pParentObject(nullptr),
+								m_pTransform(nullptr)
 	{
 
 		m_pTransform = new Transform();
@@ -46,44 +46,6 @@ namespace SRE
 		{
 			m_pTransform = _pTransform;
 		}
-
-	/*	void SRE::SceneObject::AddChild(SceneObject* _pSceneObject)
-	{
-#if _DEBUG
-		if (_pSceneObject->m_pParentObject)
-		{
-			if (_pSceneObject->m_pParentObject == this)
-				SRE::Logger::GetLoggerInstance()->L_WARNING("GameObject::AddChild > GameObject to add is already attached to this parent");
-			else
-				SRE::Logger::GetLoggerInstance()->L_WARNING("GameObject::AddChild > GameObject to add is already attached to another GameObject. Detach it from it's current parent before attaching it to another one.");
-
-			return;
-		}
-
-		if (_pSceneObject->m_pParentScene)
-		{
-			SRE::Logger::GetLoggerInstance()->L_WARNING("GameObject::AddChild > GameObject is currently attached to a GameScene. Detach it from it's current parent before attaching it to another one.");
-			return;
-		}
-#endif
-
-		_pSceneObject->m_pParentObject = this;
-		m_pChildren.push_back(_pSceneObject);
-
-		if (m_IsInitialized)
-		{
-			auto scene = GetScene();
-
-			if (!scene)
-			{
-				SRE::Logger::GetLoggerInstance()->L_WARNING("GameObject::AddChild > Failed to initialize the added GameObject! (Parent GameObject is not part of a Scene)");
-			}
-			else
-			{
-				_pSceneObject->RootInitialize(_pSceneObject->GetGameContext());
-			}
-		}
-	}*/
 
 		void SceneObject::Render(const Context& _Context, ShaderProgram *_pShader)
 		{

@@ -31,7 +31,7 @@ namespace SRE
 
 		if (!scene)
 		{
-			printf("Model (%s) failed to load: %s", fileName, importer.GetErrorString());
+			SRE::Logger::GetLoggerInstance()->m_pConsole->error("Model (%s) failed to load: %s", fileName, importer.GetErrorString());
 			return;
 		}
 
@@ -122,7 +122,7 @@ namespace SRE
 
 					if (!m_aTexturList[i]->LoadTexture())
 					{
-						printf("Failed to load texture at: %s\n", texPath);
+						SRE::Logger::GetLoggerInstance()->m_pConsole->info("Failed to load texture at: %s\n", texPath);
 						delete m_aTexturList[i];
 						m_aTexturList[i] = nullptr;
 					}

@@ -1,8 +1,6 @@
 #pragma once
 
 #include "GLEW/include/GL/glew.h"
-
-
 namespace SRE
 {
 	class Texture
@@ -23,6 +21,6 @@ namespace SRE
 		GLuint m_iTextureID;
 		int m_iWidth, m_iHeight, m_iBitDepth;
 
-		const char* pcFileLocation;
+		const char* m_pcFileLocation;
 	};
 }

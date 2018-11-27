@@ -13,10 +13,10 @@
 
 namespace SRE
 {
-
 	class Model
 	{
 	public:
+
 		Model();
 
 		void LoadModel(const std::string& fileName);
@@ -41,5 +41,4 @@ namespace SRE
 		int m_iIndicesCount;
 
 	};
-
 }

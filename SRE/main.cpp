@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "SceneObject.h"
 #include "MeshDrawComponent.h"
+#include "SplineComponent.h"
 
 
 // settings
@@ -77,7 +78,7 @@ int main(int argc, char* argv[])
 	gSceneObjectHead = new SRE::SceneObject();
 	md = new SRE::MeshDrawComponent(gHead);
 	gSceneObjectHead->AddComponent(md);
-	gSceneObjectHead->GetTransform()->SetPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+	gSceneObjectHead->GetTransform()->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 	gSceneObjectHead->GetTransform()->SetScale(glm::vec3(5.0f,5.f,5.f));
 
 	gScene->AddChild(gSceneObjectFloor);
@@ -120,8 +121,6 @@ int main(int argc, char* argv[])
 		pShaderProgram->SetUniform("lightPos", gLightPos);
 		pShaderProgram->SetUniform("lightColor", gLightColor);
 
-
-
 		// our model matrix 
 		glm::mat4 modelmatrix;
 
@@ -131,6 +130,8 @@ int main(int argc, char* argv[])
 			context.mProjection = projection;
 			context.mView = view;
 			context.fDelta = time.GetDeltaTime();
+
+			_pObjects->Update(context);
 			_pObjects->Render(context, pShaderProgram);
 		}
 

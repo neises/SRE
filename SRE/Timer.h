@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 //Note: this code is mainly from Frank Lunka D3D11 Book
 namespace SRE
 {

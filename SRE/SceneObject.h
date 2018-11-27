@@ -45,8 +45,6 @@ namespace SRE
 		Scene* m_pParentScene;
 		SceneObject* m_pParentObject;
 		Transform* m_pTransform;
-		//PhysicsCallback m_OnTriggerCallback;
-		//wstring m_Tag;
 
 		std::vector<SceneObject*> m_pChildrenRuntime;
 		std::vector<SceneObject*> m_pChildrenRemoveRuntime;

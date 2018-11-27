@@ -10,9 +10,9 @@ namespace SRE
 
 	SplineComponent::SplineComponent() :
 		m_iIndex(1)
-		, m_fSpeed(1)
+		, m_fSpeed(1.0)
 		, m_fIntern(0.0f)
-		, m_bIsPaused(true)
+		, m_bIsPaused(false)
 	{
 
 	}
@@ -64,9 +64,9 @@ namespace SRE
 					m_fIntern = m_fIntern - 1.0f;
 				}
 				else
-				{
-					
+				{					
 					m_bIsPaused = true;
+					//Restart();
 				}
 			}
 		}
@@ -105,16 +105,15 @@ namespace SRE
 		glm::vec3 p2 = m_aControlPoints[_iStartIndex + 1];
 		glm::vec3 p3 = m_aControlPoints[_iStartIndex + 2];
 		// Compute position according to Catmull-Rom equation
-		glm::vec3 position = 0.5f * ((2.0f * p1) + (-1.0f * p0 + p2) * t +
-			(2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t * t +
-			(-1.0f * p0 + 3.0f * p1 - 3.0f * p2 + p3) * t * t * t);
+		glm::vec3 position = 0.5f * ((2.0f * p1) + (-1.0f * p0 + p2) * _ft +
+			(2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * _ft * _ft +
+			(-1.0f * p0 + 3.0f * p1 - 3.0f * p2 + p3) * _ft * _ft * _ft);
 		return position;
 	}
 
 	size_t SRE::Spline::GetNumControlPoints() const
 	{
-
-		m_aControlPoints.size();
+		return m_aControlPoints.size();
 	}
 }
 

@@ -30,7 +30,6 @@ namespace SRE
 
 	private:
 		Mesh* pMesh;
-		Shader* pShader;
 		Model* pModel;
 	};
 }

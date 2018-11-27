@@ -4,12 +4,10 @@
 namespace SRE
 {
 	class SceneObject;
-
 }
- 
+
 namespace SRE
 {
-
 	class Scene
 	{
 	public:

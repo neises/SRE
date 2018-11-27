@@ -19,6 +19,7 @@ namespace SRE
 	MeshDrawComponent::~MeshDrawComponent()
 	{
 		delete pMesh;
+		delete pModel;
 	}
 
 

@@ -11,7 +11,7 @@ namespace SRE
 		m_iWidth = 0;
 		m_iHeight = 0;
 		m_iBitDepth = 0;
-		pcFileLocation = "";
+		m_pcFileLocation = "";
 	}
 
 	Texture::Texture(const char* fileLoc)
@@ -20,15 +20,15 @@ namespace SRE
 		m_iWidth = 0;
 		m_iHeight = 0;
 		m_iBitDepth = 0;
-		pcFileLocation = fileLoc;
+		m_pcFileLocation = fileLoc;
 	}
 
 	bool Texture::LoadTexture()
 	{
-		unsigned char *texData = stbi_load(pcFileLocation, &m_iWidth, &m_iHeight, &m_iBitDepth, 0);
+		unsigned char *texData = stbi_load(m_pcFileLocation, &m_iWidth, &m_iHeight, &m_iBitDepth, 0);
 		if (!texData)
 		{
-			printf("Failed to find: %s\n", pcFileLocation);
+			printf("Failed to find: %s\n", m_pcFileLocation);
 			return false;
 		}
 
@@ -52,10 +52,10 @@ namespace SRE
 
 	bool Texture::LoadTextureA()
 	{
-		unsigned char *texData = stbi_load(pcFileLocation, &m_iWidth, &m_iHeight, &m_iBitDepth, 0);
+		unsigned char *texData = stbi_load(m_pcFileLocation, &m_iWidth, &m_iHeight, &m_iBitDepth, 0);
 		if (!texData)
 		{
-			printf("Failed to find: %s\n", pcFileLocation);
+			printf("Failed to find: %s\n", m_pcFileLocation);
 			return false;
 		}
 
@@ -90,7 +90,7 @@ namespace SRE
 		m_iWidth = 0;
 		m_iHeight = 0;
 		m_iBitDepth = 0;
-		pcFileLocation = "";
+		m_pcFileLocation = "";
 	}
 
 
