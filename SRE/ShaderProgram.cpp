@@ -51,8 +51,6 @@ namespace SRE
 		m_ProjectionLoc = glGetUniformLocation(m_ProgramID, "projection");
 		assert(m_ProjectionLoc != -1);
 
-		m_ObjectColorLoc = glGetUniformLocation(m_ProgramID, "uinColor");
-
 		// Use the shader before setting uniforms!
 		Activate();
 
