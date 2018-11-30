@@ -24,6 +24,7 @@ const float MOUSE_SENSITIVITY = 0.1f;
 SRE::App* gApp;
 SRE::Model* gHead;
 SRE::Model* gFloor;
+SRE::Model* gLightProxy;
 SRE::ShaderManager* gShaderManager;
 SRE::FPSCamera* gCamera;
 
@@ -31,12 +32,13 @@ SRE::FPSCamera* gCamera;
 SRE::Scene* gScene;
 SRE::SceneObject* gSceneObjectFloor;
 SRE::SceneObject* gSceneObjectHead;
+SRE::SceneObject* gSceneObjectLightProxy;
 
 
 
 
 //light global
-glm::vec3 gLightPos(0.0f, 3.0f, -10.0f);
+glm::vec3 gLightPos(0.0f, 2.0f, 2.0f);
 glm::vec3 gLightColor(1.0f, 1.0f, 1.0f);
 float gAngle = 0.0f;;
 
@@ -59,10 +61,15 @@ int main(int argc, char* argv[])
 
 	// load model
 	gHead = new SRE::Model();
-	gHead->LoadModel("assets/Models/head.obj");
+	gHead->LoadModel("assets/Models/head2.obj");
 
 	gFloor = new SRE::Model();
 	gFloor->LoadModel("assets/Models/floor.obj");
+
+	gLightProxy = new SRE::Model();
+	gLightProxy->LoadModel("assets/Models/cube.obj");
+
+
 
 	// scene
 	gScene = new SRE::Scene();
@@ -73,23 +80,28 @@ int main(int argc, char* argv[])
 	SRE::MeshDrawComponent* md = new SRE::MeshDrawComponent(gFloor);
 	gSceneObjectFloor->AddComponent(md);
 	gSceneObjectFloor->GetTransform()->SetPosition(glm::vec3(0.0f, -0.5f, 0.0f));
-	gSceneObjectFloor->GetTransform()->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
 
 	gSceneObjectHead = new SRE::SceneObject();
 	md = new SRE::MeshDrawComponent(gHead);
 	gSceneObjectHead->AddComponent(md);
 	gSceneObjectHead->GetTransform()->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-	gSceneObjectHead->GetTransform()->SetScale(glm::vec3(5.0f,5.f,5.f));
+
+	gSceneObjectLightProxy = new SRE::SceneObject();
+	md = new SRE::MeshDrawComponent(gLightProxy);
+	gSceneObjectLightProxy->AddComponent(md);
+	gSceneObjectLightProxy->GetTransform()->SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
+	
 
 	gScene->AddChild(gSceneObjectFloor);
 	gScene->AddChild(gSceneObjectHead);
+	//gScene->AddChild(gSceneObjectLightProxy);
 	
 
 	// load shader
 	gShaderManager = SRE::ShaderManager::GetShaderManagerInstance();
-	SRE::ShaderProgram* pShaderProgram = gShaderManager->GetShaderProgram("res/Shader/Lighting.vert", "res/Shader/Lighting.frag");
-	// activate the shader
-	pShaderProgram->Activate();
+	SRE::ShaderProgram* pShaderProgram = gShaderManager->GetShaderProgram("res/Shader/simpleShader.vert", "res/Shader/simpleShader.frag", "Basic");
+	pShaderProgram = gShaderManager->GetShaderProgram("res/Shader/Lighting.vert", "res/Shader/Lighting.frag", "Light");
+
 	while (!gApp->GetWindow()->IsClosing())
 	{
 		// render
@@ -106,35 +118,55 @@ int main(int argc, char* argv[])
 		// update Lightpos
 		gAngle += (float)time.GetDeltaTime() * 50.0f;
 		gLightPos.x = 8.0f * sinf(glm::radians(gAngle));
+		//gSceneObjectHead->GetTransform()->SetEuler(glm::vec3(0.0f, time.GetTotalTime(), 0.0f));
 
-		// set view projection matrices
-		glm::mat4 projection, view, model;
+		// try to avoid this
+		gSceneObjectLightProxy->GetTransform()->SetPosition(gLightPos);
+
+		//view projection matrices we will pass them later
+		glm::mat4 projection, view;
 		view = gCamera->getViewMatrix();
 		projection = glm::perspective(glm::radians(gCamera->getFOV()), (float)pWindow->GetWidth() / pWindow->GetHeight(), 0.1f, 1000.f);
-		pShaderProgram->SetProjection(projection);
-		pShaderProgram->SetView(view);
-
 
 		//light params
 		glm::vec3 viewPos(gCamera->getPosition());
-		pShaderProgram->SetUniform("viewPos", viewPos);
-		pShaderProgram->SetUniform("lightPos", gLightPos);
-		pShaderProgram->SetUniform("lightColor", gLightColor);
 
-		// our model matrix 
-		glm::mat4 modelmatrix;
+		// convert lightpos in objectspace from head
+		glm::mat3 localObjectspace = gSceneObjectHead->GetTransform()->GetMatrix();
+		localObjectspace = glm::inverse(localObjectspace);
+		glm::vec3 LightPosinObjectSpace = localObjectspace * gLightPos;
 
+		//draw the objects with the light shader
+		pShaderProgram = gShaderManager->GetShaderProgrambyName("Light");
+		SRE::Context context;
 		for (SRE::SceneObject* _pObjects : gScene->GetSceneObjects())
 		{
-			SRE::Context context;
-			context.mProjection = projection;
-			context.mView = view;
+
+			context.m_Projection = projection;
+			context.m_View = view;
+			context.m_ViewPos = viewPos;
+			context.m_LightPos = LightPosinObjectSpace;
+			context.m_LightColor = gLightColor;
 			context.fDelta = time.GetDeltaTime();
 
 			_pObjects->Update(context);
 			_pObjects->Render(context, pShaderProgram);
 		}
+		pShaderProgram->Deactivate();
 
+
+		//draw the light proxy but use different shader
+		pShaderProgram = gShaderManager->GetShaderProgrambyName("Basic");
+		pShaderProgram->Activate();
+		// update the view 
+		context.m_View = view;
+		context.m_Projection = projection;
+		gSceneObjectLightProxy->Update(context);
+		gSceneObjectLightProxy->Render(context, pShaderProgram);
+		pShaderProgram->Deactivate();
+		
+		
+		
 		// swap buffers
 		pWindow->SwapBuffers();
 	}

@@ -29,9 +29,14 @@ namespace SRE
 		return m_pShaderManagerInstance;
 	}
 
-	ShaderProgram* ShaderManager::GetShaderProgram(const std::string& _sVertex_file_path, const std::string& _sFragment_file_path)
+	ShaderProgram* ShaderManager::GetShaderProgram(const std::string& _sVertex_file_path, const std::string& _sFragment_file_path, const std::string& _sProgramName /*= std::string()*/)
 	{
 		std::string name = _sVertex_file_path + _sFragment_file_path;
+
+		if (!_sProgramName.empty())
+		{
+			name = _sProgramName;
+		}
 
 		auto lb = m_ShaderPrograms.lower_bound(name);
 
@@ -45,6 +50,11 @@ namespace SRE
 			m_ShaderPrograms.insert(lb, { name, shaderProgram });
 			return shaderProgram;
 		}
+	}
+
+	SRE::ShaderProgram* ShaderManager::GetShaderProgrambyName(const std::string& _sProgramName)
+	{
+		return m_ShaderPrograms[_sProgramName];
 	}
 
 }

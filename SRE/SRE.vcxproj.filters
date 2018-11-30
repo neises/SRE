@@ -139,12 +139,6 @@
     <None Include="res\Shader\simpleShader.vert">
       <Filter>Shader</Filter>
     </None>
-    <None Include="res\Shader\basicShader.fs">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="res\Shader\basicShader.vs">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="res\Shader\Lighting.frag">
       <Filter>Shader</Filter>
     </None>

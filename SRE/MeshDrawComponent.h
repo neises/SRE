@@ -15,7 +15,6 @@ namespace SRE
 
 namespace SRE
 {
-
 	class MeshDrawComponent : public SRE::BaseComponent
 	{
 	public:
@@ -27,9 +26,7 @@ namespace SRE
 		virtual void Update(const Context& _Context, Transform* _pTransform) override;
 		virtual void Render(const Context& _Context, Transform* _pTransform, ShaderProgram* _pShader) override;
 
-
 	private:
-		Mesh* pMesh;
 		Model* pModel;
 	};
 }

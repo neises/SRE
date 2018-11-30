@@ -17,8 +17,8 @@ namespace SRE
 
 		static ShaderManager* GetShaderManagerInstance();
 
-		ShaderProgram* GetShaderProgram(const std::string& _sVertex_file_path, const std::string& _sFragment_file_path);
-
+		ShaderProgram* GetShaderProgram(const std::string& _sVertex_file_path, const std::string& _sFragment_file_path, const std::string& _sProgramName = std::string());
+		ShaderProgram* GetShaderProgrambyName(const std::string& _sProgramName);
 	private:
 		std::unordered_map<std::string, ShaderProgram*> m_ShaderPrograms;
 		static ShaderManager* m_pShaderManagerInstance;

@@ -18,7 +18,6 @@ namespace SRE
 
 	MeshDrawComponent::~MeshDrawComponent()
 	{
-		delete pMesh;
 		delete pModel;
 	}
 
@@ -41,11 +40,19 @@ namespace SRE
 			SRE::Logger::GetLoggerInstance()->L_ERROR("Shader is null in MeshComponent!");
 			return;
 		}
-
+		
 		_pShader->Activate(); //activate shader
+
+		//set the shader properties via the context info
+		_pShader->SetProjection(_Context.m_Projection);
+		_pShader->SetView(_Context.m_View);
+		_pShader->SetUniform("viewPos", _Context.m_ViewPos);
+		_pShader->SetUniform("lightPos", _Context.m_LightPos);
+		_pShader->SetUniform("lightColor", _Context.m_LightColor);
 		_pShader->SetModel(_pTransform->GetMatrix()); //set transform matrix
 		//_pShader->SetMaterial(_pMaterial); // set material 
-		//pMesh->RenderMesh(); // render the mesh;
+
+		// render the model
 		pModel->RenderModel();
 	}
 }

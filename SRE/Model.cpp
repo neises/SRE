@@ -27,7 +27,7 @@ namespace SRE
 	void Model::LoadModel(const std::string & fileName)
 	{
 		Assimp::Importer importer;
-		const aiScene *scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals );
+		const aiScene *scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs );
 
 		if (!scene)
 		{
@@ -77,10 +77,8 @@ namespace SRE
 				vertices.insert(vertices.end(), { 0.0f, 0.0f });
 			}
 			
-			vertices.insert(vertices.end(), { -_pMesh->mNormals[i].x, -_pMesh->mNormals[i].y, -_pMesh->mNormals[i].z });
-		
-
-			
+			vertices.insert(vertices.end(), { _pMesh->mNormals[i].x, _pMesh->mNormals[i].y, _pMesh->mNormals[i].z });
+				
 		}
 
 		for (size_t i = 0; i < _pMesh->mNumFaces; i++)
@@ -160,6 +158,7 @@ namespace SRE
 
 	Model::~Model()
 	{
+		ClearModel();
 	}
 
 }

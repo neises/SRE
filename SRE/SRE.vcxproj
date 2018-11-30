@@ -60,8 +60,6 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Shader\basicShader.fs" />
-    <None Include="res\Shader\basicShader.vs" />
     <None Include="res\Shader\Lighting.frag" />
     <None Include="res\Shader\Lighting.vert" />
     <None Include="res\Shader\simpleShader.frag" />

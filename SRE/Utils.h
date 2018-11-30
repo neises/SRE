@@ -80,8 +80,11 @@ namespace SRE
 	struct Context
 	{
 	public:
-		glm::mat4 mView;
-		glm::mat4 mProjection;
+		glm::mat4 m_View;
+		glm::mat4 m_Projection;
+		glm::vec3 m_ViewPos;
+		glm::vec3 m_LightPos;
+		glm::vec3 m_LightColor;
 		float fDelta;
 	};
 }
