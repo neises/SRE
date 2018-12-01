@@ -69,7 +69,17 @@ int main(int argc, char* argv[])
 	gLightProxy = new SRE::Model();
 	gLightProxy->LoadModel("assets/Models/cube.obj");
 
-
+	//spline
+	SRE::t_Spline spline;
+	spline.m_aControlPoints.push_back(glm::vec3(0.0f, 0.f, -1.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(1.0f, 0.f, -2.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(2.0f, 0.f, -3.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(3.0f, 0.f, -4.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(2.0f, 0.f, -3.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(1.0f, 0.f, -2.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(0.0f, 0.f, -1.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(1.0f, 0.f, -2.0f ));
+	spline.m_aControlPoints.push_back(glm::vec3(2.0f, 0.f, -3.0f ));
 
 	// scene
 	gScene = new SRE::Scene();
@@ -77,18 +87,22 @@ int main(int argc, char* argv[])
 
 	// objects
 	gSceneObjectFloor = new SRE::SceneObject();
-	SRE::MeshDrawComponent* md = new SRE::MeshDrawComponent(gFloor);
-	gSceneObjectFloor->AddComponent(md);
+	SRE::MeshDrawComponent* pMeshComponent = new SRE::MeshDrawComponent(gFloor);
+	gSceneObjectFloor->AddComponent(pMeshComponent);
 	gSceneObjectFloor->GetTransform()->SetPosition(glm::vec3(0.0f, -0.5f, 0.0f));
 
 	gSceneObjectHead = new SRE::SceneObject();
-	md = new SRE::MeshDrawComponent(gHead);
-	gSceneObjectHead->AddComponent(md);
+	pMeshComponent = new SRE::MeshDrawComponent(gHead);
+	SRE::SplineComponent* pSpline = new SRE::SplineComponent();
+	pSpline->SetSpline(spline);
+	pSpline->SetSpeed(0.1f);
+	gSceneObjectHead->AddComponent(pMeshComponent);
+	gSceneObjectHead->AddComponent(pSpline);
 	gSceneObjectHead->GetTransform()->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 
 	gSceneObjectLightProxy = new SRE::SceneObject();
-	md = new SRE::MeshDrawComponent(gLightProxy);
-	gSceneObjectLightProxy->AddComponent(md);
+	pMeshComponent = new SRE::MeshDrawComponent(gLightProxy);
+	gSceneObjectLightProxy->AddComponent(pMeshComponent);
 	gSceneObjectLightProxy->GetTransform()->SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
 	
 

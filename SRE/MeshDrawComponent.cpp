@@ -34,6 +34,8 @@ namespace SRE
 
 	void SRE::MeshDrawComponent::Render(const Context& _Context, Transform* _pTransform, ShaderProgram* _pShader)
 	{
+		//BaseComponent::Render(_Context, _pTransform, _pShader);
+
 		//check shader if null
 		if (!_pShader)
 		{

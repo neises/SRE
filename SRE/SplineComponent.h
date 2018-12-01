@@ -16,7 +16,7 @@ namespace SRE
 
 namespace SRE
 {
-	struct Spline
+	typedef struct Spline
 	{
 		// constrol points
 		// needs n+2 points and n is the number 
@@ -27,7 +27,7 @@ namespace SRE
 
 		size_t GetNumControlPoints() const;
 
-	};
+	}t_Spline;
 
 	class SplineComponent : public SRE::BaseComponent
 	{
@@ -35,7 +35,7 @@ namespace SRE
 		SplineComponent();
 		~SplineComponent();
 
-		void SetSpline(const Spline& _Spline);
+		void SetSpline(const t_Spline& _Spline);
 		void SetSpeed(float _fSpeed);
 		void SetPaused(bool _bShouldPause);
 
@@ -47,7 +47,7 @@ namespace SRE
 		virtual void Render(const Context& _Context, Transform* _pTransform, ShaderProgram* _pShader) override;
 	private:
 
-		Spline m_SplinePath;
+		t_Spline m_SplinePath;
 		bool m_bIsPaused;
 		size_t m_iIndex;
 		float m_fIntern;

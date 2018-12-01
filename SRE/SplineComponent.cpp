@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Utils.h"
 #include "ShaderProgram.h"
+#include "Log.h"
 
 
 namespace SRE
@@ -10,7 +11,7 @@ namespace SRE
 
 	SplineComponent::SplineComponent() :
 		m_iIndex(1)
-		, m_fSpeed(1.0)
+		, m_fSpeed(1.0f)
 		, m_fIntern(0.0f)
 		, m_bIsPaused(false)
 	{
@@ -22,7 +23,7 @@ namespace SRE
 
 	}
 
-	void SplineComponent::SetSpline(const Spline& _Spline)
+	void SplineComponent::SetSpline(const t_Spline& _Spline)
 	{
 		m_SplinePath = _Spline;
 	}
@@ -51,6 +52,7 @@ namespace SRE
 
 	void SplineComponent::Update(const Context& _Context, Transform* _pTransform)
 	{
+
 		if (!m_bIsPaused)
 		{
 			m_fIntern += m_fSpeed * _Context.fDelta;
@@ -67,13 +69,12 @@ namespace SRE
 				{					
 					m_bIsPaused = true;
 					//Restart();
+					SRE::Logger::GetLoggerInstance()->L_INFO("SplineComponent done");
 				}
 			}
 		}
-
 		
-		glm::vec3 currentPosition = m_SplinePath.ComputePosition(m_iIndex, m_iIndex);
-
+		glm::vec3 currentPosition = m_SplinePath.ComputePosition(m_iIndex, m_fIntern);
 		_pTransform->SetPosition(currentPosition);
 	}
 
@@ -105,6 +106,7 @@ namespace SRE
 		glm::vec3 p2 = m_aControlPoints[_iStartIndex + 1];
 		glm::vec3 p3 = m_aControlPoints[_iStartIndex + 2];
 		// Compute position according to Catmull-Rom equation
+		// https://www.mvps.org/directx/articles/catmull/
 		glm::vec3 position = 0.5f * ((2.0f * p1) + (-1.0f * p0 + p2) * _ft +
 			(2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * _ft * _ft +
 			(-1.0f * p0 + 3.0f * p1 - 3.0f * p2 + p3) * _ft * _ft * _ft);
